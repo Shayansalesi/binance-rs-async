@@ -119,7 +119,7 @@ pub struct CancelReplace {
     /// The binance-provided id of the order being cancelled
     pub cancel_order_id: Option<u64>,
     /// 
-    pub new_client_order_id: Option<u64>,
+    pub new_client_order_id: Option<StringRecordsIntoIter<>>,
     pub stop_price: Option<f64>,
     pub iceberg_qty: Option<f64>,
     pub new_order_resp_type: Option<OrderResponse>,
@@ -399,7 +399,9 @@ impl Account {
         Ok(tr)
     }
 
-
+    /// Place a cancel replace order.
+    /// 
+    /// 
     pub async fn cancel_replace_order(&self, o: CancelReplace) -> Result<OrderCanceledReplaced> {
         let recv_window = o.recv_window.unwrap_or(self.recv_window);
         let request = build_signed_request_p(o, recv_window)?;
