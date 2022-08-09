@@ -79,14 +79,14 @@ pub struct OrderCancellation {
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CancelReplaceMode {
     /// If the cancel request fails, the new order placement will not be attempted
-    STOP_ON_FAILURE,
+    StopOnFailure,
     /// new order placement will be attempted even if cancel request fails
-    ALLOW_FAILURES,
+    AllowFailure,
 }  
 
 /// By default, buy
 impl Default for CancelReplaceMode {
-    fn default() -> Self { Self::STOP_ON_FAILURE }
+    fn default() -> Self { Self::StopOnFailure }
 }
 
 /// Parameters for CancelReplace endpoint.
@@ -102,8 +102,8 @@ pub struct CancelReplace {
     #[serde(rename = "type")]
     /// The type of the new order
     pub order_type: OrderType,
-    /// The mode of the cancel replace [STOP_ON_FAILURE, ALLOW_FAILURES]
-    pub cancel_replace_mode: CancelReplaceMode,
+    /// The mode of the cancel replace [STOP_ON_FAILURE, ALLOW_FAILURE]
+    pub cancel_replace_mode: Option<CancelReplaceMode>,
     /// TIF of the new order
     pub time_in_force: Option<TimeInForce>,
     /// The quantity of the new order in the base currency
@@ -407,8 +407,11 @@ impl Account {
     /// 
     pub async fn cancel_replace_order(&self, o: CancelReplace) -> Result<OrderCanceledReplaced> {
         let recv_window = o.recv_window.unwrap_or(self.recv_window);
+        println!("Building signed request");
         let request = build_signed_request_p(o, recv_window)?;
-        let data = self.client.delete_signed(API_V3_REPLACE, &request).await?;
+        println!("Built signed request: {}", request);
+        let data = self.client.post_signed(API_V3_REPLACE, &request).await?;
+        println!("blah bblah bbitch{}", data);
         let order_canceled_replaced: OrderCanceledReplaced = from_str(data.as_str())?;
 
         Ok(order_canceled_replaced)
