@@ -403,15 +403,10 @@ impl Account {
     }
 
     /// Place a cancel replace order.
-    /// 
-    /// 
     pub async fn cancel_replace_order(&self, o: CancelReplace) -> Result<OrderCanceledReplaced> {
         let recv_window = o.recv_window.unwrap_or(self.recv_window);
-        println!("Building signed request");
         let request = build_signed_request_p(o, recv_window)?;
-        println!("Built signed request: {}", request);
         let data = self.client.post_signed(API_V3_REPLACE, &request).await?;
-        println!("blah bblah bbitch{}", data);
         let order_canceled_replaced: OrderCanceledReplaced = from_str(data.as_str())?;
 
         Ok(order_canceled_replaced)
