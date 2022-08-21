@@ -316,7 +316,6 @@ impl Account {
         params.insert("symbol".into(), symbol.into());
         let request = build_signed_request(params, self.recv_window)?;
         let data = self.client.delete_signed(API_V3_OPEN_ORDERS, &request).await?;
-        println!("data: {:?}", data);
         let order: Vec<OrderCancelResponse> = from_str(data.as_str())?;
         Ok(order)
     }
