@@ -680,6 +680,8 @@ pub struct OCOOrderReport {
     pub side: OrderSide,
     #[serde(default, with = "string_or_float_opt")]
     pub stop_price: Option<f64>,
+    #[serde(default, with = "string_or_float_opt")]
+    pub iceberg_qty: Option<f64>,
 }
 
 /// archived and is_isolated are only applicable to certain endpoints

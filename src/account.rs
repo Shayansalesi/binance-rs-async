@@ -153,6 +153,29 @@ pub struct OrderStatusRequest {
     pub recv_window: Option<u64>,
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct OrderCancelResponse {
+    pub symbol: String,
+    pub orig_client_order_id: String,
+    pub order_id: u64,
+    pub order_list_id: i32,
+    pub client_order_id: String,
+    #[serde(with = "string_or_float")]
+    pub price: f64,
+    #[serde(with = "string_or_float")]
+    pub orig_qty: f64,
+    #[serde(with = "string_or_float")]
+    pub executed_qty: f64,
+    #[serde(with = "string_or_float")]
+    pub cummulative_quote_qty: f64,
+    pub status: OrderStatus,
+    pub time_in_force: TimeInForce,
+    #[serde(rename = "type")]
+    pub order_type: OrderType,
+    pub side: OrderSide,
+}
+
 /// Order Status Request
 /// perform a query on all orders for the account
 #[derive(Default, Debug, Serialize, Deserialize, Clone)]
@@ -276,6 +299,7 @@ impl Account {
         Ok(order)
     }
 
+
     /// Cancels all currently open orders of specified symbol for the account
     /// # Examples
     /// ```rust,no_run
@@ -284,7 +308,7 @@ impl Account {
     /// let canceled_orders = tokio_test::block_on(account.cancel_all_open_orders("ETHBTC"));
     /// assert!(canceled_orders.is_ok(), "{:?}", canceled_orders);
     /// ```
-    pub async fn cancel_all_open_orders<S>(&self, symbol: S) -> Result<Vec<Order>>
+    pub async fn cancel_all_open_orders<S>(&self, symbol: S) -> Result<Vec<OrderCancelResponse>>
     where
         S: Into<String>,
     {
@@ -292,7 +316,8 @@ impl Account {
         params.insert("symbol".into(), symbol.into());
         let request = build_signed_request(params, self.recv_window)?;
         let data = self.client.delete_signed(API_V3_OPEN_ORDERS, &request).await?;
-        let order: Vec<Order> = from_str(data.as_str())?;
+        println!("data: {:?}", data);
+        let order: Vec<OrderCancelResponse> = from_str(data.as_str())?;
         Ok(order)
     }
 
