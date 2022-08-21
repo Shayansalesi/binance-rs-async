@@ -199,8 +199,8 @@ pub struct Order {
     #[serde(rename = "type")]
     pub order_type: OrderType,
     pub side: OrderSide,
-    #[serde(with = "string_or_float")]
-    pub stop_price: f64,
+    // #[serde(with = "string_or_float")]
+    // pub stop_price: f64,
     #[serde(with = "string_or_float")]
     pub iceberg_qty: f64,
     pub time: u64,
