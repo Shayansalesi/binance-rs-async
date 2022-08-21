@@ -446,6 +446,11 @@ pub struct OrderUpdate {
     #[serde(rename = "Q")]
     #[serde(with = "string_or_float")]
     pub quote_order_qty: f64,
+    // These are optional fields
+    #[serde(rename = "j")]
+    pub strategy_id: Option<i64>,
+    #[serde(rename = "J")]
+    pub strategy_type: Option<i64>,
 }
 
 /// For OCO Events
