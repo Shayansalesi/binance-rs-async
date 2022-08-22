@@ -31,6 +31,26 @@ pub struct QueryResult {
     pub id: i64,
 }
 
+/// The execution type as reported in executionReport events.
+/// 
+/// This is seen in the payload for order updates in the user data stream.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum ExecutionType {
+    /// The order has been accepted into the engine.
+    New,
+    /// The order has been canceled by the user.
+    Canceled,
+    /// The order has been rejected and was not processed
+    /// (This is not pushed into the user data stream).
+    Rejected,
+    /// Part or all of the order's quantity has filled.
+    Trade,
+    /// The order was cnaceled according the the order type's rules
+    Expired,
+}
+
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TradesEvent {
@@ -401,7 +421,7 @@ pub struct OrderUpdate {
     #[serde(rename = "C")]
     pub origin_client_id: Option<String>,
     #[serde(rename = "x")]
-    pub execution_type: OrderStatus,
+    pub execution_type: ExecutionType,
     #[serde(rename = "X")]
     pub current_order_status: OrderStatus,
     #[serde(rename = "r")]
