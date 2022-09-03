@@ -224,10 +224,9 @@ pub struct OrderCanceled {
 pub struct OrderCanceledReplaced {
     pub cancel_result: String,
     pub new_order_result: String,
-    pub cancel_response: OrderCanceled,
-    pub new_order_response: Transaction,
+    pub cancel_response: Option<OrderCanceled>,
+    pub new_order_response: Option<Transaction>,
 }
-
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -508,7 +507,9 @@ pub enum OrderSide {
 
 /// By default, buy
 impl Default for OrderSide {
-    fn default() -> Self { Self::Buy }
+    fn default() -> Self {
+        Self::Buy
+    }
 }
 
 /// Order types, the following restrictions apply
@@ -535,7 +536,9 @@ pub enum OrderType {
 
 /// By default, use market orders
 impl Default for OrderType {
-    fn default() -> Self { Self::Market }
+    fn default() -> Self {
+        Self::Market
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

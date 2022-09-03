@@ -1,8 +1,11 @@
 use crate::client::*;
+// use crate::errors;
 use crate::errors::*;
 use crate::rest_model::*;
 use crate::util::*;
 use serde_json::from_str;
+// use serde_json::from_value;
+// use serde_json::Value;
 use std::collections::BTreeMap;
 
 static API_V3_ACCOUNT: &str = "/api/v3/account";
@@ -82,11 +85,13 @@ pub enum CancelReplaceMode {
     StopOnFailure,
     /// new order placement will be attempted even if cancel request fails
     AllowFailure,
-}  
+}
 
 /// By default, buy
 impl Default for CancelReplaceMode {
-    fn default() -> Self { Self::StopOnFailure }
+    fn default() -> Self {
+        Self::StopOnFailure
+    }
 }
 
 /// Parameters for CancelReplace endpoint.
@@ -298,7 +303,6 @@ impl Account {
 
         Ok(order)
     }
-
 
     /// Cancels all currently open orders of specified symbol for the account
     /// # Examples

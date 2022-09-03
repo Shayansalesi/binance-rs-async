@@ -5,3 +5,4 @@ precommit_venv
 *.fmt
 *.iml
 .idea
+examples/cancel_order.rs

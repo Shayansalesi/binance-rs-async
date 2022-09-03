@@ -32,7 +32,7 @@ pub struct QueryResult {
 }
 
 /// The execution type as reported in executionReport events.
-/// 
+///
 /// This is seen in the payload for order updates in the user data stream.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
@@ -49,7 +49,6 @@ pub enum ExecutionType {
     /// The order was cnaceled according the the order type's rules
     Expired,
 }
-
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
