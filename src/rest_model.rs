@@ -224,8 +224,8 @@ pub struct OrderCanceled {
 pub struct OrderCanceledReplaced {
     pub cancel_result: String,
     pub new_order_result: String,
-    pub cancel_response: Option<OrderCanceled>,
-    pub new_order_response: Option<Transaction>,
+    pub cancel_response: OrderCanceled,
+    pub new_order_response: Transaction,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
